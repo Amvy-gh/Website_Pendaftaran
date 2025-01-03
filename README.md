@@ -297,7 +297,7 @@ function validateForm(event) {
 }
 
 // Event Listener untuk validasi form saat submit
-document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('form').addEventListener('submit', validateForm);
 });
 ```
