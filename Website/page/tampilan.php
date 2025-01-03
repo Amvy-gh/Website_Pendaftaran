@@ -11,11 +11,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../font_awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../style/style_tampilan.css">
+    <link rel="stylesheet" href="../style/style_star.css">
+    <script src="../js/style.js"></script>
     <script src="../js/theme_and_info.js"></script>
 </head>
 
 <body>
-<div class="stars"></div>
+<div id="stars"></div>
 <nav class="navbar bg-body-tertiary bg-light mb-4">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Tampilan data</a>

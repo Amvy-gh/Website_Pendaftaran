@@ -9,12 +9,14 @@
     <title>Login Page</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style/style_login.css">
+    <link rel="stylesheet" href="../style/style_star.css">
+    <script src="../js/style.js"></script>
 </head>
 <body>
-    <div class="stars"></div>
+    <div id="stars"></div>
     <div class="form-container">
         <form method="post">
-            <h3>Login Here</h3>
+            <h3>Login Here</h3>s
             <?php
             if (isset($_GET['error'])) {
                 echo "<div class='error'>" . htmlspecialchars($_GET['error']) . "</div>";

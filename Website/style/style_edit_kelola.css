@@ -32,25 +32,6 @@ body {
     background: linear-gradient(45deg, #3366ff, #66ffcc);
 }
 
-/* Layout components */
-.stars {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    background-image: 
-        radial-gradient(2px 2px at 20px 30px, #fff, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 50px 160px, #fff, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0));
-    background-size: 200px 200px;
-    animation: moveStars 100s linear infinite;
-    z-index: 1;
-}
-
 .container {
     position: relative;
     z-index: 2;
@@ -264,10 +245,4 @@ td:nth-child(8) {
 
 [data-status="Non-aktif"] {
     color: #ff3366;
-}
-
-/* Animations */
-@keyframes moveStars {
-    from { transform: translateY(0); }
-    to { transform: translateY(-100%); }
 }
