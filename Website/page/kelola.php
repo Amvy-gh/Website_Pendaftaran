@@ -1,7 +1,7 @@
 <?php
-include '../koneksi/koneksi.php';
-include '../session/session.php';
-include '../action/ubah.php';
+    include '../koneksi/koneksi.php';
+    include '../session/session.php';
+    include '../action/ubah.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -10,9 +10,9 @@ include '../action/ubah.php';
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../font_awesome/css/font-awesome.min.css">
-    <title>UAS - Anjes Bermana</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style/style_edit_kelola.css">
+    <title>UAS - Anjes Bermana</title>
 </head>
 
 <body>

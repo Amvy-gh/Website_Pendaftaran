@@ -1,28 +1,6 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['username'])) {
-    header('Location: ../login/login.php');
-    exit();
-}
-include '../koneksi/koneksi.php';
-
-// Ambil data user yang sedang login
-$username = $_SESSION['username'];
-$sql = "SELECT ip_address, browser_info FROM users WHERE username='$username'";
-$result = mysqli_query($conn, $sql);
-$data = mysqli_fetch_assoc($result);
-
-$ip_address = $data['ip_address'];
-$browser_info = $data['browser_info'];
-
-// Ganti IP ::1 dengan IPv4 127.0.0.1
-if ($ip_address == '::1') {
-    $ip_address = '127.0.0.1';
-}
-
-$query = "SELECT * FROM siswa ORDER BY id_siswa ASC;";
-$sql = mysqli_query($conn, $query);
+    session_start();
+    include '../function/get.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,54 +11,7 @@ $sql = mysqli_query($conn, $query);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../font_awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../style/style_tampilan.css">
-    <script>
-    // Fungsi untuk menetapkan cookie
-    function setCookie(name, value, days) {
-        let expires = "";
-        if (days) {
-            const date = new Date();
-            // Mengatur masa berlaku cookie
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            expires = "; expires=" + date.toUTCString();
-        }
-        document.cookie = name + "=" + (value || "") + expires + "; path=/";
-    }
-
-    // Fungsi untuk mendapatkan cookie
-    function getCookie(name) {
-        const nameEQ = name + "=";
-        const ca = document.cookie.split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i].trim();
-            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-        }
-        return null;
-    }
-
-    // Fungsi untuk mengubah tema
-    function toggleTheme() {
-    const body = document.body;
-    const isDark = body.getAttribute('data-theme') === 'dark';
-    body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    setCookie("theme", isDark ? 'light' : 'dark', 30);
-    }
-
-    window.onload = function() {
-        const theme = getCookie("theme") || 'light';
-        document.body.setAttribute('data-theme', theme);
-    }
-
-    // Fungsi untuk menampilkan atau menyembunyikan informasi IP dan Browser
-    function toggleIPBrowserInfo() {
-        var infoDiv = document.getElementById("ipBrowserInfo");
-        // Cek apakah elemen sedang ditampilkan
-        if (infoDiv.style.display === "none" || infoDiv.style.display === "") {
-            infoDiv.style.display = "block";
-        } else {
-            infoDiv.style.display = "none";
-        }
-    }
-    </script>
+    <script src="../js/theme_and_info.js"></script>
 </head>
 
 <body>
@@ -167,7 +98,6 @@ $sql = mysqli_query($conn, $query);
                 </tbody>
             </table>
         </div>
-
     </div>
 </body>
 </html>
