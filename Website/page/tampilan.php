@@ -55,16 +55,16 @@
             <i class="fa fa-pencil"></i>
             Edit Data
         </a>
-        
+
+        <button type="button" class="btn btn-secondary mb-3" onclick="toggleTheme()">
+            <i class="fa fa-adjust"></i> 
+            Ganti Tema
+        </button>
+
         <a href="../login/logout.php" type="button" class="btn btn-danger mb-3">
             <i class="fa fa-sign-out"></i>
             Logout
         </a>
-
-        <button type="button" class="btn btn-secondary mb-3 float-end" onclick="toggleTheme()">
-            <i class="fa fa-adjust"></i> 
-            Ganti Tema
-        </button>
         
         <div class="table-responsive">
             <table class="table align-middle table-bordered table-hover">
