@@ -26,7 +26,7 @@
             <a class="navbar-brand" href="#">Tambah dan Edit Data</a>
         </div>
     </nav>
-    <div class="container">
+    <div class="container" style="color: white;">
         <form method="POST" action="../action/proses.php" enctype="multipart/form-data">
             <input type="hidden" name="id_siswa" value="<?php echo htmlspecialchars($id_siswa); ?>">
             <input type="hidden" name="aksi" value="<?php echo isset($_GET['ubah']) ? 'edit' : 'add'; ?>">

@@ -51,25 +51,26 @@
             </ul>
         </div>
 
-        <button type="button" class="btn btn-secondary mb-3" onclick="toggleTheme()">
-            <i class="fa fa-refresh"></i> 
-            Ganti Tema
-        </button>
-
         <a href="edit.php" type="button" class="btn btn-primary mb-3">
             <i class="fa fa-pencil"></i>
             Edit Data
         </a>
+        
         <a href="../login/logout.php" type="button" class="btn btn-danger mb-3">
             <i class="fa fa-sign-out"></i>
             Logout
         </a>
+
+        <button type="button" class="btn btn-secondary mb-3 float-end" onclick="toggleTheme()">
+            <i class="fa fa-adjust"></i> 
+            Ganti Tema
+        </button>
         
         <div class="table-responsive">
             <table class="table align-middle table-bordered table-hover">
                 <thead style="text-align:center">
                     <tr>
-                        <th><center>No</center></th>
+                        <th>No</th>
                         <th>NISN</th>
                         <th>Nama Siswa</th>
                         <th>Tanggal Lahir</th>
@@ -84,7 +85,7 @@
                     <?php
                     $no = 1;
                     while ($result = mysqli_fetch_assoc($sql)) {
-                    ?>
+                    ?>  
                     <tr style="text-align:center">
                         <td><center><?php echo $no++; ?></center></td>
                         <td><?php echo $result['nisn']; ?></td>

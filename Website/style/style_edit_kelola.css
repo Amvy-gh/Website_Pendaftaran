@@ -6,24 +6,11 @@
     font-family: 'Poppins', sans-serif;
 }
 
-/* Scrollbar styles */
 ::-webkit-scrollbar {
-    width: 8px;
+    display: none;
 }
 
-::-webkit-scrollbar-track {
-    background: rgba(28, 39, 60, 0.8);
-}
-
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(45deg, #ff3366, #3366ff);
-    border-radius: 8px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(45deg, #3366ff, #66ffcc);
-}
-
+/* Container */
 .container {
     position: relative;
     z-index: 2;
@@ -46,6 +33,12 @@
     border-radius: 20px;
     z-index: -1;
     opacity: 0.3;
+}
+
+.container h1 {
+    color: #66ffcc;
+    font-weight: 600;
+    letter-spacing: 1px;
 }
 
 /* Navigation */
@@ -112,12 +105,12 @@
     left: 100%;
 }
 
-.btn-primary {
+.btn-primary, .table .btn-primary {
     background: linear-gradient(90deg, #3366ff, #66ffcc);
     border: none;
 }
 
-.btn-danger {
+.btn-danger, .table .btn-danger {
     background: linear-gradient(90deg, #ff3366, #ff6666);
     border: none;
 }
@@ -183,39 +176,9 @@
     transform: scale(1.05);
 }
 
-/* Table buttons */
 .table .btn-sm {
     padding: 0.4rem 0.8rem;
     margin: 0.2rem;
-}
-
-.table .btn-primary {
-    background: linear-gradient(45deg, #3366ff, #66ffcc);
-}
-
-.table .btn-danger {
-    background: linear-gradient(45deg, #ff3366, #ff6666);
-}
-
-td:nth-child(8) {
-    position: relative;
-}
-
-/* Table header elements */
-.container h1 {
-    color: #66ffcc;
-    font-weight: 600;
-    letter-spacing: 1px;
-}
-
-.blockquote {
-    color: #fff;
-    border-left: 4px solid #66ffcc;
-    padding-left: 1rem;
-}
-
-.blockquote-footer {
-    color: rgba(102, 255, 204, 0.7);
 }
 
 /* Specific elements and states */
@@ -229,6 +192,16 @@ td:nth-child(8) {
     border-color: #66ffcc;
     transform: scale(1.02);
     box-shadow: 0 0 15px rgba(102, 255, 204, 0.3);
+}
+
+.blockquote {
+    color: #fff;
+    border-left: 4px solid #66ffcc;
+    padding-left: 1rem;
+}
+
+.blockquote-footer {
+    color: rgba(102, 255, 204, 0.7);
 }
 
 [data-status="Aktif"] {
