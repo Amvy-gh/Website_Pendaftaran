@@ -16,12 +16,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style/style_edit_kelola.css">
-    <link rel="stylesheet" href="../style/style_star.css">
+    <link rel="stylesheet" href="../style/style_background.css">
     <title>UAS</title>  
     <script src="../js/style.js"></script>
 </head>
 <body>
-    <div id="stars"></div>
+    <video autoplay muted loop id="background-video">
+        <source src="../video/bg_video.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
     <nav class="navbar bg-body-tertiary bg-light mb-4">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Edit Data</a>

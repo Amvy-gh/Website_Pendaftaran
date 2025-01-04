@@ -19,18 +19,6 @@
     font-family: 'Poppins', sans-serif;
 }
 
-body {
-    min-height: 100vh;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    transition: background-color 0.3s, color 0.3s;
-}
-
-
-[data-theme="dark"] .stars {
-    display: block;
-}
-
 [data-theme="dark"] .table td {
     color: #fff !important;
 }

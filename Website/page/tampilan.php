@@ -11,14 +11,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../font_awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../style/style_tampilan.css">
-    <link rel="stylesheet" href="../style/style_star.css">
-    <script src="../js/style.js"></script>
+    <link rel="stylesheet" href="../style/style_background.css">
     <script src="../js/theme_and_info.js"></script>
 </head>
 
 <body>
-<div id="stars"></div>
-<nav class="navbar bg-body-tertiary bg-light mb-4">
+    <video autoplay muted loop id="background-video">
+        <source src="../video/bg_video.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+    <nav class="navbar bg-body-tertiary bg-light mb-4">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Tampilan data</a>
         </div>
@@ -50,7 +52,7 @@
         </div>
 
         <button type="button" class="btn btn-secondary mb-3" onclick="toggleTheme()">
-            <i class="fa fa-moon"></i> 
+            <i class="fa fa-refresh"></i> 
             Ganti Tema
         </button>
 

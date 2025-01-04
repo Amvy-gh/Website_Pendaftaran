@@ -9,18 +9,24 @@
     <title>Login Page</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style/style_login.css">
-    <link rel="stylesheet" href="../style/style_star.css">
+    <link rel="stylesheet" href="../style/style_background.css">
     <script src="../js/style.js"></script>
 </head>
 <body>
-    <div id="stars"></div>
+    <!-- Video Background -->
+    <video autoplay muted loop id="background-video">
+        <source src="../video/bg_video.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+
+    <!-- Kontainer Form -->
     <div class="form-container">
         <form method="post">
-            <h3>Login Here</h3>s
+            <h3>Login Here</h3>
             <?php
-            if (isset($_GET['error'])) {
-                echo "<div class='error'>" . htmlspecialchars($_GET['error']) . "</div>";
-            }
+                if (isset($_GET['error'])) {
+                    echo "<div class='error'>" . htmlspecialchars($_GET['error']) . "</div>";
+                }
             ?>
             <label for="username">Username</label>
             <input type="text" id="username" name="username" placeholder="Enter your username" required>
