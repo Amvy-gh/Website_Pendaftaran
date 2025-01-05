@@ -1,7 +1,7 @@
+// Fungsi untuk menyimpan data dengan tanggal kedaluwarsa
 function saveToLocalStorage() {
-    // Cek apakah form dalam mode tambah data
-    const action = document.querySelector('input[name="aksi"]').value;
-    if (action === 'add') {
+    const aksi = document.querySelector('input[name="aksi"]').value;
+    if (aksi === 'add') {
         const nisn = document.getElementById('nisn').value;
         const nama = document.getElementById('nama').value;
         const tanggalLahir = document.getElementById('tanggal_lahir').value;
@@ -17,7 +17,8 @@ function saveToLocalStorage() {
             jenis_kelamin: jenisKelamin,
             alamat: alamat,
             nilai_ujian: nilaiUjian,
-            status_siswa: statusSiswa
+            status_siswa: statusSiswa,
+            timestamp: new Date().getTime()
         };
 
         // Simpan ke localStorage
@@ -25,14 +26,23 @@ function saveToLocalStorage() {
     }
 }
 
-// Fungsi untuk mengisi form dari localStorage
+// Fungsi untuk mengisi form dari localStorage jika data belum kedaluwarsa
 function populateFormFromLocalStorage() {
-    // Cek apakah form dalam mode tambah data
-    const action = document.querySelector('input[name="aksi"]').value;
-    if (action === 'add') {
+    const aksi = document.querySelector('input[name="aksi"]').value;
+    if (aksi === 'add') {
         const storedData = localStorage.getItem('formData');
         if (storedData) {
             const formData = JSON.parse(storedData);
+            const currentTime = new Date().getTime();
+            const expiryTime = 3 * 24 * 60 * 60 * 1000;
+
+            // Mengecek apakah data sudah kedaluwarsa (lebih dari 3 hari)
+            if (currentTime - formData.timestamp > expiryTime) {
+                localStorage.removeItem('formData'); 
+                return;
+            }
+
+            // Mengisi form jika data belum kedaluwarsa
             document.getElementById('nisn').value = formData.nisn;
             document.getElementById('nama').value = formData.nama_siswa;
             document.getElementById('tanggal_lahir').value = formData.tanggal_lahir;
@@ -46,8 +56,8 @@ function populateFormFromLocalStorage() {
 
 // Fungsi untuk menghapus data dari localStorage setelah form disubmit
 function clearLocalStorage() {
-    const action = document.querySelector('input[name="aksi"]').value;
-    if (action === 'add') {
+    const aksi = document.querySelector('input[name="aksi"]').value;
+    if (aksi === 'add') {
         localStorage.removeItem('formData');
     }
 }

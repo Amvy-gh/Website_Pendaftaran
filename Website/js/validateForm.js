@@ -1,18 +1,27 @@
+function sanitizeInput(input) {
+    const element = document.createElement('div');
+    if (input) {
+        element.innerText = input;
+        return element.innerHTML;  
+    }
+    return input;
+}
+
 function validateForm(event) {
     const form = event.target;
-    const nisn = form.nisn.value;
-    const namaSiswa = form.nama_siswa.value;
+    const nisn = sanitizeInput(form.nisn.value);
+    const namaSiswa = sanitizeInput(form.nama_siswa.value);
     const tanggalLahir = form.tanggal_lahir.value;
     const jenisKelamin = form.jenis_kelamin.value;
-    const alamat = form.alamat.value;
+    const alamat = sanitizeInput(form.alamat.value);
     const statusSiswa = form.status_siswa.value;
     const foto = form.foto.files[0];
-    const nilaiUjian = form.nilai_ujian.value;
+    const nilaiUjian = sanitizeInput(form.nilai_ujian.value);
     const aksi = form.aksi.value;
 
     // Validate NISN
-    if (nisn.length !== 10) {
-        alert("NISN harus terdiri dari 10 digit!");
+    if (nisn.length !== 10 || isNaN(nisn)) {
+        alert("NISN harus terdiri dari 10 digit angka");
         event.preventDefault();
         return false;
     }
@@ -34,7 +43,7 @@ function validateForm(event) {
         age--;
     }
 
-    if (age <= 15 || age >= 21 ) {
+    if (age <= 15 || age >= 21) {
         alert("Tanggal Lahir harus membuat usia siswa antara 15 dan 21 tahun!");
         event.preventDefault();
         return false;
@@ -54,7 +63,20 @@ function validateForm(event) {
         return false;
     }
 
-    // Foto Siswa hanya wajib jika aksi adalah add (menambah data baru)
+    // Validate Nilai Ujian
+    if (nilaiUjian === "" || isNaN(nilaiUjian) || nilaiUjian < 0 || nilaiUjian > 100) {
+        alert("Nilai Ujian harus diisi dengan angka antara 0 dan 100!");
+        event.preventDefault();
+        return false;
+    }
+
+    // Validate Status Siswa
+    if (statusSiswa === "") {
+        alert("Status Siswa harus dipilih!");
+        event.preventDefault();
+        return false;
+    }
+
     if (aksi === "add" && !foto) {
         alert("Foto Siswa harus diunggah!");
         event.preventDefault();
@@ -69,27 +91,12 @@ function validateForm(event) {
         }
 
         const fileSize = foto.size;
-        if (fileSize > 2 * 1024 * 1024) { // 2MB
+        if (fileSize > 2 * 1024 * 1024) {
             alert("Ukuran file harus kurang dari 2MB!");
             event.preventDefault();
             return false;
         }
     }
-
-    // Validate Status Siswa
-    if (statusSiswa === "") {
-        alert("Status Siswa harus dipilih!");
-        event.preventDefault();
-        return false;
-    }
-
-    // Validate Nilai Ujian
-    if (nilaiUjian === "" || isNaN(nilaiUjian) || nilaiUjian < 0 || nilaiUjian > 100) {
-        alert("Nilai Ujian harus diisi dengan angka antara 0 dan 100!");
-        event.preventDefault();
-        return false;
-    }
-
     return true;
 }
 

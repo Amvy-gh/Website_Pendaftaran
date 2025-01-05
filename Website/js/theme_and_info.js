@@ -26,7 +26,7 @@ function toggleTheme() {
     const body = document.body;
     const isDark = body.getAttribute('data-theme') === 'dark';
     body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    setCookie("theme", isDark ? 'light' : 'dark', 30);
+    setCookie("theme", isDark ? 'light' : 'dark', 3);
 }
 
 window.onload = function() {

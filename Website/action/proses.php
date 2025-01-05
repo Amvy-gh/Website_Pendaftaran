@@ -9,10 +9,8 @@
         public function __construct($conn) {
             $this->conn = $conn;
         }
-
-        // Validasi di Sisi Server
         
-        // Metode untuk validasi NISN s
+        // Metode untuk validasi NISN
         public function validasiNISN($nisn) {
             return preg_match('/^\d{10}$/', $nisn);
         }
@@ -124,17 +122,43 @@
 
         $foto = isset($_FILES['foto']) ? $siswaObj->uploadFoto($_FILES['foto']) : "";
 
-        // Aksi tambah data
         if ($_POST['aksi'] == "add") {
+            // Validasi NISN untuk tidak ada duplikasi
+            $query_check_nisn = "SELECT COUNT(*) FROM siswa WHERE nisn = '$nisn'";
+            $result_check_nisn = mysqli_query($conn, $query_check_nisn);
+            $count = mysqli_fetch_row($result_check_nisn)[0];
+        
+            if ($count > 0) {
+                echo "<script>
+                        alert('NISN sudah ada dalam sistem!');
+                        window.history.back();
+                      </script>";
+                exit();
+            }
+        
             if ($siswaObj->tambahDataSiswa($nisn, $nama_siswa, $tanggal_lahir, $jenis_kelamin, $foto, $alamat, $nilai_ujian, $status_siswa)) {
                 header("location: ../page/edit.php");
             } else {
                 echo "Error: " . mysqli_error($conn);
             }
         } 
+        
         // Aksi edit data
         else if ($_POST['aksi'] == "edit") {
             $id_siswa = $_POST['id_siswa'];
+        
+            // Validasi NISN untuk memastikan tidak ada duplikasi
+            $query_check_nisn = "SELECT COUNT(*) FROM siswa WHERE nisn = '$nisn' AND id_siswa != '$id_siswa'";
+            $result_check_nisn = mysqli_query($conn, $query_check_nisn);
+            $count = mysqli_fetch_row($result_check_nisn)[0];
+        
+            if ($count > 0) {
+                echo "<script>
+                        alert('NISN sudah ada dalam sistem!');
+                        window.history.back();
+                      </script>";
+                exit();
+            }
         
             if (!empty($_FILES['foto']['name'])) {
                 $foto = $siswaObj->uploadFoto($_FILES['foto']);
@@ -158,5 +182,4 @@
             echo "Error: " . mysqli_error($conn);
         }
     }
-
 ?>

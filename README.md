@@ -45,7 +45,7 @@ Website ini dapat diakses melalui link berikut:
 ## Bagian 1: Client-side Programming
 
 ### 1.1 Manipulasi DOM dengan JavaScript
-- Membuat form dengan minimal 4 elemen input (contoh: teks, checkbox, radio).
+- Membuat form dengan minimal 4 elemen input (contoh: teks, checkbox, radio)
   
 ```html
 <form method="POST" action="proses.php" enctype="multipart/form-data">
@@ -115,47 +115,10 @@ Website ini dapat diakses melalui link berikut:
             <input type="file" name="foto" id="foto" class="form-control" <?php echo !isset($_GET['ubah']) ? 'required' : ''; ?>>
         </div>
     </div>
-
-    <?php if (!empty($result['foto_siswa'])): ?>
-        <div class="mb-3 row">
-            <label for="alamat" class="col-sm-2 col-form-label">Foto Saat Ini</label>
-            <div class="col-sm-10">
-                <img src="img/<?php echo $result['foto_siswa']; ?>" alt="Foto Siswa" width="150" class="img-thumbnail">
-                <input type="hidden" name="foto_lama" value="<?php echo $result['foto_siswa']; ?>">
-            </div>
-        </div>
-    <?php endif; ?>
-
-    <div class="mb-3 row mt-4">
-        <div class="col">
-            <?php
-            if (isset($_GET['ubah'])) {
-                ?>
-                <button type="submit" name="aksi" value="edit" class="btn btn-primary">
-                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                    Simpan Perubahan
-                </button>
-                <?php
-            } else {
-                ?>
-                <button type="submit" name="aksi" value="add" class="btn btn-primary"
-                    onClick="return confirm('Are u sure about this ?')">
-                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                    Tambahkan
-                </button>
-                <?php
-            }
-            ?>
-            <a href="edit.php" type="button" class="btn btn-danger">
-                <i class="fa fa-reply" aria-hidden="true"></i>
-                Batal
-            </a>
-        </div>
-    </div>
 </form>
 ```
 
-- Menampilkan data dari server dalam tabel HTML.
+- Menampilkan data dari server dalam tabel HTML
   
 ```html
 <table class="table align-middle table-bordered table-hover">
@@ -196,37 +159,46 @@ Website ini dapat diakses melalui link berikut:
 ```
 
 ### 1.2 Event Handling
-- Handling minimal 3 event yang berbeda untuk validasi dan meng-handle form
+- Terapkan minimal 3 event berbeda untuk menangani form
+- Gunakan JavaScript untuk memvalidasi setiap input sebelum diproses oleh PHP
 
 ```javascript
-// Fungsi untuk validasi form sebelum data diproses
+function sanitizeInput(input) {
+    const element = document.createElement('div');
+    if (input) {
+        element.innerText = input;
+        return element.innerHTML;  
+    }
+    return input;
+}
+
 function validateForm(event) {
     const form = event.target;
-    const nisn = form.nisn.value;
-    const namaSiswa = form.nama_siswa.value;
+    const nisn = sanitizeInput(form.nisn.value);
+    const namaSiswa = sanitizeInput(form.nama_siswa.value);
     const tanggalLahir = form.tanggal_lahir.value;
     const jenisKelamin = form.jenis_kelamin.value;
-    const alamat = form.alamat.value;
+    const alamat = sanitizeInput(form.alamat.value);
     const statusSiswa = form.status_siswa.value;
     const foto = form.foto.files[0];
-    const nilaiUjian = form.nilai_ujian.value;
+    const nilaiUjian = sanitizeInput(form.nilai_ujian.value);
     const aksi = form.aksi.value;
 
-    // Validasi NISN
-    if (nisn.length !== 10) {
-        alert("NISN harus terdiri dari 10 digit!");
+    // Validate NISN
+    if (nisn.length !== 10 || isNaN(nisn)) {
+        alert("NISN harus terdiri dari 10 digit angka");
         event.preventDefault();
         return false;
     }
 
-    // Validasi Nama Siswa
+    // Validate Nama Siswa
     if (!/^[A-Za-z\s]+$/.test(namaSiswa)) {
         alert("Nama Siswa hanya boleh mengandung huruf dan spasi!");
         event.preventDefault();
         return false;
     }
 
-    // Validasi Tanggal Lahir (Usia 15-21 Tahun)
+    // Validate Tanggal Lahir (Usia Siswa Antara 15 dan 21 Tahun)
     const today = new Date();
     const birthDate = new Date(tanggalLahir);
     let age = today.getFullYear() - birthDate.getFullYear();
@@ -236,33 +208,46 @@ function validateForm(event) {
         age--;
     }
 
-    if (age < 15 || age > 21) {
-        alert("Usia siswa harus antara 15 dan 21 tahun!");
+    if (age <= 15 || age >= 21) {
+        alert("Tanggal Lahir harus membuat usia siswa antara 15 dan 21 tahun!");
         event.preventDefault();
         return false;
     }
 
-    // Validasi Jenis Kelamin
+    // Validate Jenis Kelamin
     if (jenisKelamin === "") {
         alert("Jenis Kelamin harus dipilih!");
         event.preventDefault();
         return false;
     }
 
-    // Validasi Alamat
+    // Validate Alamat Lengkap
     if (alamat === "") {
         alert("Alamat Lengkap harus diisi!");
         event.preventDefault();
         return false;
     }
 
-    // Validasi Foto
+    // Validate Nilai Ujian
+    if (nilaiUjian === "" || isNaN(nilaiUjian) || nilaiUjian < 0 || nilaiUjian > 100) {
+        alert("Nilai Ujian harus diisi dengan angka antara 0 dan 100!");
+        event.preventDefault();
+        return false;
+    }
+
+    // Validate Status Siswa
+    if (statusSiswa === "") {
+        alert("Status Siswa harus dipilih!");
+        event.preventDefault();
+        return false;
+    }
+
     if (aksi === "add" && !foto) {
         alert("Foto Siswa harus diunggah!");
         event.preventDefault();
         return false;
     } else if (foto) {
-        // Validasi tipe file
+        // Jika foto diupload, validasi tipe dan ukuran file
         const fileType = foto.type;
         if (fileType !== 'image/jpeg' && fileType !== 'image/png') {
             alert("Hanya file JPG atau PNG yang diperbolehkan!");
@@ -270,7 +255,6 @@ function validateForm(event) {
             return false;
         }
 
-        // Validasi ukuran file (maksimal 2MB)
         const fileSize = foto.size;
         if (fileSize > 2 * 1024 * 1024) {
             alert("Ukuran file harus kurang dari 2MB!");
@@ -278,26 +262,10 @@ function validateForm(event) {
             return false;
         }
     }
-
-    // Validasi Status Siswa
-    if (statusSiswa === "") {
-        alert("Status Siswa harus dipilih!");
-        event.preventDefault();
-        return false;
-    }
-
-    // Validasi Nilai Ujian
-    if (nilaiUjian === "" || isNaN(nilaiUjian) || nilaiUjian < 0 || nilaiUjian > 100) {
-        alert("Nilai Ujian harus berupa angka antara 0 dan 100!");
-        event.preventDefault();
-        return false;
-    }
-
     return true;
 }
 
-// Event Listener untuk validasi form saat submit
-    document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('form').addEventListener('submit', validateForm);
 });
 ```
@@ -305,7 +273,8 @@ function validateForm(event) {
 ## Bagian 2: Server-side Programming
 
 ### 2.1 Pengelolaan Data dengan PHP
-- Menggunakan metode POST dan GET untuk beberapa aksi 
+- Menggunakan metode POST dan GET pada formulir
+- Parsing data dari variabel global dan lakukan validasi di sisi server
 
 ```php
 if (isset($_POST['aksi'])) {
@@ -317,8 +286,8 @@ if (isset($_POST['aksi'])) {
     $alamat = $_POST['alamat'];
     $nilai_ujian = $_POST['nilai_ujian'];
     $status_siswa = $_POST['status_siswa'];
-    
-    // Validasi server-side
+
+    // Validasi NISN
     if (!$siswaObj->validasiNISN($nisn)) {
         echo "NISN harus terdiri dari 10 digit angka.";
         exit();
@@ -350,17 +319,43 @@ if (isset($_POST['aksi'])) {
 
     $foto = isset($_FILES['foto']) ? $siswaObj->uploadFoto($_FILES['foto']) : "";
 
-    // Aksi tambah data
     if ($_POST['aksi'] == "add") {
+        // Validasi NISN untuk tidak ada duplikasi
+        $query_check_nisn = "SELECT COUNT(*) FROM siswa WHERE nisn = '$nisn'";
+        $result_check_nisn = mysqli_query($conn, $query_check_nisn);
+        $count = mysqli_fetch_row($result_check_nisn)[0];
+    
+        if ($count > 0) {
+            echo "<script>
+                    alert('NISN sudah ada dalam sistem!');
+                    window.history.back();
+                    </script>";
+            exit();
+        }
+    
         if ($siswaObj->tambahDataSiswa($nisn, $nama_siswa, $tanggal_lahir, $jenis_kelamin, $foto, $alamat, $nilai_ujian, $status_siswa)) {
-            header("location: edit.php");
+            header("location: ../page/edit.php");
         } else {
             echo "Error: " . mysqli_error($conn);
         }
     } 
+    
     // Aksi edit data
     else if ($_POST['aksi'] == "edit") {
         $id_siswa = $_POST['id_siswa'];
+    
+        // Validasi NISN untuk memastikan tidak ada duplikasi
+        $query_check_nisn = "SELECT COUNT(*) FROM siswa WHERE nisn = '$nisn' AND id_siswa != '$id_siswa'";
+        $result_check_nisn = mysqli_query($conn, $query_check_nisn);
+        $count = mysqli_fetch_row($result_check_nisn)[0];
+    
+        if ($count > 0) {
+            echo "<script>
+                    alert('NISN sudah ada dalam sistem!');
+                    window.history.back();
+                    </script>";
+            exit();
+        }
     
         if (!empty($_FILES['foto']['name'])) {
             $foto = $siswaObj->uploadFoto($_FILES['foto']);
@@ -369,66 +364,106 @@ if (isset($_POST['aksi'])) {
         }
     
         if ($siswaObj->updateDataSiswa($id_siswa, $nisn, $nama_siswa, $tanggal_lahir, $jenis_kelamin, $foto, $alamat, $nilai_ujian, $status_siswa)) {
-            header("location: edit.php");
+            header("location: ../page/edit.php");
         } else {
             echo "Error: " . mysqli_error($conn);
         }
     }
-```
+}
 
-- Menyimpan data ke basis data, termasuk data jenis browser dan alamat IP pengguna.
-
-```php
-if (mysqli_num_rows($result) > 0) {
-        $data = mysqli_fetch_assoc($result);
-
-        if ($password == $data['password']) {
-            // Deteksi IP dan Browser
-            $ip_address = getUserIp();
-            $browser_info = getBrowser($_SERVER['HTTP_USER_AGENT']);
-
-            // Simpan IP dan browser ke database
-            $update_sql = "UPDATE users SET ip_address='$ip_address', browser_info='$browser_info' WHERE username='$username'";
-            mysqli_query($conn, $update_sql);
-
-// Tampilkan IP dan Jenis Browser
-function toggleIPBrowserInfo() {
-    var infoDiv = document.getElementById("ipBrowserInfo");
-    // Cek apakah elemen sedang ditampilkan
-    if (infoDiv.style.display === "none" || infoDiv.style.display === "") {
-        infoDiv.style.display = "block";
+if (isset($_GET['hapus'])) {
+    $id_siswa = $_GET['hapus'];
+    if ($siswaObj->hapusDataSiswa($id_siswa)) {
+        header("location: ../page/edit.php");
     } else {
-        infoDiv.style.display = "none";
+        echo "Error: " . mysqli_error($conn);
     }
 }
 ```
 
-### 2.2 Objek PHP Berbasis OOP
+- Menyimpan data ke basis data, termasuk data jenis browser dan alamat IP pengguna
 
 ```php
-// Menambah data
+<?php  
+if (!isset($_SESSION['username'])) {
+        header('Location: ../login/login.php');
+        exit();
+    }
+    include '../koneksi/koneksi.php';
+
+    // Ambil data user yang sedang login
+    $username = $_SESSION['username'];
+    $sql = "SELECT ip_address, browser_info FROM users WHERE username='$username'";
+    $result = mysqli_query($conn, $sql);
+    $data = mysqli_fetch_assoc($result);
+        
+    $ip_address = $data['ip_address'];
+    $browser_info = $data['browser_info'];
+
+    // Ganti IP ::1 dengan IPv4 127.0.0.1
+    if ($ip_address == '::1') {
+        $ip_address = '127.0.0.1';
+    }
+
+    $query = "SELECT * FROM siswa ORDER BY id_siswa ASC;";
+    $sql = mysqli_query($conn, $query);
+?>
+
+<?php  
+if (!isset($_SESSION['username'])) {
+        header('Location: ../login/login.php');
+        exit();
+    }
+    include '../koneksi/koneksi.php';
+
+    // Ambil data user yang sedang login
+    $username = $_SESSION['username'];
+    $sql = "SELECT ip_address, browser_info FROM users WHERE username='$username'";
+    $result = mysqli_query($conn, $sql);
+    $data = mysqli_fetch_assoc($result);
+        
+    $ip_address = $data['ip_address'];
+    $browser_info = $data['browser_info'];
+
+    // Ganti IP ::1 dengan IPv4 127.0.0.1
+    if ($ip_address == '::1') {
+        $ip_address = '127.0.0.1';
+    }
+
+    $query = "SELECT * FROM siswa ORDER BY id_siswa ASC;";
+    $sql = mysqli_query($conn, $query);
+?>
+
+```
+
+### 2.2 Objek PHP Berbasis OOP
+
+- Buat sebuah objek PHP berbasis OOP yang memiliki minimal dua metode dan gunakan objek tersebut
+
+```php
+// Metode untuk menambah data siswa
 public function tambahDataSiswa($nisn, $nama_siswa, $tanggal_lahir, $jenis_kelamin, $foto, $alamat, $nilai_ujian, $status_siswa) {
     $query = "INSERT INTO siswa (nisn, nama_siswa, tanggal_lahir, jenis_kelamin, foto_siswa, alamat, nilai_ujian, status_siswa) 
-              VALUES ('$nisn', '$nama_siswa', '$tanggal_lahir', '$jenis_kelamin', '$foto', '$alamat', '$nilai_ujian', '$status_siswa')";
+            VALUES ('$nisn', '$nama_siswa', '$tanggal_lahir', '$jenis_kelamin', '$foto', '$alamat', '$nilai_ujian', '$status_siswa')";
     return mysqli_query($this->conn, $query);
 }
 
 // Metode untuk memperbarui data siswa
 public function updateDataSiswa($id_siswa, $nisn, $nama_siswa, $tanggal_lahir, $jenis_kelamin, $foto, $alamat, $nilai_ujian, $status_siswa) {
     $query = "UPDATE siswa 
-              SET nisn = '$nisn', nama_siswa = '$nama_siswa', tanggal_lahir = '$tanggal_lahir', 
-                  jenis_kelamin = '$jenis_kelamin', foto_siswa = '$foto', alamat = '$alamat', 
-                  nilai_ujian = '$nilai_ujian', status_siswa = '$status_siswa' 
-              WHERE id_siswa = '$id_siswa'";
+            SET nisn = '$nisn', nama_siswa = '$nama_siswa', tanggal_lahir = '$tanggal_lahir', 
+                jenis_kelamin = '$jenis_kelamin', foto_siswa = '$foto', alamat = '$alamat', 
+                nilai_ujian = '$nilai_ujian', status_siswa = '$status_siswa' 
+            WHERE id_siswa = '$id_siswa'";
     return mysqli_query($this->conn, $query);
 }
 
-// Hapus Data
+// Metode untuk menghapus siswa
 public function hapusDataSiswa($id_siswa) {
     $queryShow = "SELECT * FROM siswa WHERE id_siswa = '$id_siswa';";
     $sqlShow = mysqli_query($this->conn, $queryShow);
     $result = mysqli_fetch_assoc($sqlShow);
-    unlink("img/" . $result['foto_siswa']);
+    unlink("../img/" . $result['foto_siswa']);
 
     $query = "DELETE FROM siswa WHERE id_siswa = '$id_siswa';";
     return mysqli_query($this->conn, $query);
@@ -465,27 +500,27 @@ CREATE TABLE `users` (
 
 ```php
 <?php
-class Koneksi {
-    private $host;
-    private $user;
-    private $pass;
-    private $db;
-    private $conn;
+    class Koneksi {
+        private $host;
+        private $user;
+        private $pass;
+        private $db;
+        private $conn;
 
-    public function __construct($host, $user, $pass, $db) {
-        $this->host = $host;
-        $this->user = $user;
-        $this->pass = $pass;
-        $this->db = $db;
-        $this->conn = mysqli_connect($this->host, $this->user, $this->pass, $this->db);
-        if (!$this->conn) {
-            die("Koneksi gagal: " . mysqli_connect_error());
+        public function __construct($host, $user, $pass, $db) {
+            $this->host = $host;
+            $this->user = $user;
+            $this->pass = $pass;
+            $this->db = $db;
+            $this->conn = mysqli_connect($this->host, $this->user, $this->pass, $this->db);
+            if (!$this->conn) {
+                die("Koneksi gagal: " . mysqli_connect_error());
+            }
         }
-    }
 
-    public function getConn() {
-        return $this->conn;
-    }
+        public function getConn() {
+            return $this->conn;
+        }
 }
 
 $koneksi = new Koneksi('localhost', 'root', '', 'db_sekolah');
@@ -536,29 +571,29 @@ if (isset($_GET['hapus'])) {
 ## Bagian 4: State Management
 
 ### 4.1 State Management dengan Session
-- Digunakan pada tampilan.php edit.php dan kelola.php dengan include 'koneksi/koneksi.php' dan include 'session/session.php';
+- Menggunakan session_start pada tampilan.php edit.php dan kelola.php dengan include 'koneksi/koneksi.php' dan include 'session/session.php';
 
 ```php
 <?php
-session_start();
+    session_start();
 
-// Cek apakah user sudah login
-if (!isset($_SESSION['username'])) {
-    header('Location: login.php');
-    exit();
-}
+    // Cek apakah user sudah login
+    if (!isset($_SESSION['username'])) {
+        header('Location: login.php');
+        exit();
+    }
 ?>
 ```
 
 ### 4.2 Pengelolaan State dengan Cookie dan Browser Storage
-- Cookie digunakan untuk menyimpan tema yang digunakan oleh user sehingga ketika direfresh ataupun logout dari website maka tema yang sebelumnya dipakai akan tetap sama
+- Menetapkan Cookie untuk menyimpan tema yang digunakan oleh user sehingga ketika direfresh ataupun logout dari website maka tema yang sebelumnya dipakai akan tetap sama selama 3 hari
 
 ```javascript
-// Fungsi untuk menetapkan cookie
 function setCookie(name, value, days) {
     let expires = "";
     if (days) {
         const date = new Date();
+        // Mengatur masa berlaku cookie
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         expires = "; expires=" + date.toUTCString();
     }
@@ -576,26 +611,37 @@ function getCookie(name) {
     return null;
 }
 
-// Fungsi cookie untuk mengubah tema
+// Fungsi untuk mengubah tema
 function toggleTheme() {
     const body = document.body;
     const isDark = body.getAttribute('data-theme') === 'dark';
     body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    setCookie("theme", isDark ? 'light' : 'dark', 30);
+    setCookie("theme", isDark ? 'light' : 'dark', 3);
 }
 
 window.onload = function() {
     const theme = getCookie("theme") || 'light';
     document.body.setAttribute('data-theme', theme);
 }
+
+// Fungsi untuk menampilkan atau menyembunyikan informasi IP dan Browser
+function toggleIPBrowserInfo() {
+    var infoDiv = document.getElementById("ipBrowserInfo");
+    // Cek apakah elemen sedang ditampilkan
+    if (infoDiv.style.display === "none" || infoDiv.style.display === "") {
+        infoDiv.style.display = "block";
+    } else {
+        infoDiv.style.display = "none";
+    }
+}
 ```
-- Local Storage digunakan ketika user ingin menambahkan data dan jika dalam perjalanan menambahkan data ia refresh atau logout, data yang sebelumnya masih ada ketika ia kembali ingin menambahkan data dan akan terhapus ketika user menekan submit.
+- Local Storage digunakan untuk menyimpan data sementara saat user menambahkannya, sehingga data tetap ada meskipun halaman di-refresh atau logout, dan terhapus saat submit
 
 ```javascript
 // Local Storage
 function saveToLocalStorage() {
-    const action = document.querySelector('input[name="aksi"]').value;
-    if (action === 'add') {
+    const aksi = document.querySelector('input[name="aksi"]').value;
+    if (aksi === 'add') {
         const nisn = document.getElementById('nisn').value;
         const nama = document.getElementById('nama').value;
         const tanggalLahir = document.getElementById('tanggal_lahir').value;
@@ -611,20 +657,32 @@ function saveToLocalStorage() {
             jenis_kelamin: jenisKelamin,
             alamat: alamat,
             nilai_ujian: nilaiUjian,
-            status_siswa: statusSiswa
+            status_siswa: statusSiswa,
+            timestamp: new Date().getTime()
         };
 
+        // Simpan ke localStorage
         localStorage.setItem('formData', JSON.stringify(formData));
     }
 }
 
-// Fungsi untuk mengisi form dari localStorage
+// Fungsi untuk mengisi form dari localStorage jika data belum kedaluwarsa
 function populateFormFromLocalStorage() {
-    const action = document.querySelector('input[name="aksi"]').value;
-    if (action === 'add') {
+    const aksi = document.querySelector('input[name="aksi"]').value;
+    if (aksi === 'add') {
         const storedData = localStorage.getItem('formData');
         if (storedData) {
             const formData = JSON.parse(storedData);
+            const currentTime = new Date().getTime();
+            const expiryTime = 3 * 24 * 60 * 60 * 1000;
+
+            // Mengecek apakah data sudah kedaluwarsa (lebih dari 3 hari)
+            if (currentTime - formData.timestamp > expiryTime) {
+                localStorage.removeItem('formData'); 
+                return;
+            }
+
+            // Mengisi form jika data belum kedaluwarsa
             document.getElementById('nisn').value = formData.nisn;
             document.getElementById('nama').value = formData.nama_siswa;
             document.getElementById('tanggal_lahir').value = formData.tanggal_lahir;
@@ -638,18 +696,21 @@ function populateFormFromLocalStorage() {
 
 // Fungsi untuk menghapus data dari localStorage setelah form disubmit
 function clearLocalStorage() {
-    const action = document.querySelector('input[name="aksi"]').value;
-    if (action === 'add') {
+    const aksi = document.querySelector('input[name="aksi"]').value;
+    if (aksi === 'add') {
         localStorage.removeItem('formData');
     }
 }
 
+// Pastikan data ditampilkan saat halaman dimuat
 window.onload = function() {
     populateFormFromLocalStorage();
 }
 
 const form = document.querySelector('form');
 form.addEventListener('input', saveToLocalStorage);
+
+// Hapus localStorage setelah submit
 form.addEventListener('submit', clearLocalStorage);
 ```
 
@@ -679,8 +740,9 @@ form.addEventListener('submit', clearLocalStorage);
 
 ### 3. Keamanan Aplikasi Web
 - Validasi input pada sisi antarmuka (front-end) dan sisi server (back-end)
-- Direct HTTP ke HTTPS menggunakan SSL Certificate yang disediakan gratis
-- Catatan untuk HTTPS harus diperbaharui setiap 3bulan sekali
+- Menggukan HTTPS menggunakan SSL Certificate yang disediakan gratis
+- Direct HTTP ke HTTPS menggunakan .htaccess
+- Perbaharui SSL Certificate setiap 3 bulan sekali
 
 ### 4. Konfigurasi Server
 - Menaruh database dengan ketentuan yang telah diterapkan penyedia hosting 
